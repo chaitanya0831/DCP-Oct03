@@ -1,0 +1,79 @@
+  499  cd d:
+  500  cd dcp-oct03/
+  501  mkdir testrepo1
+  502  cd testrepo1/
+  503  git init
+  504  clear
+  505  echo "rec1" >> file1.txt
+  506  git add file1.txt
+  507  git status
+  508  git commit -m "CM1"
+  509  git log
+  510  clear
+  511  echo "rec1" >> file2.txt
+  512  git add .
+  513  git commit -m "CM2"
+  514  git log
+  515  clear
+  516  echo "adsfasd" >> file3.txt
+  517  git status
+  518  clear
+  519  vi .gitignore
+  520  cat .gitignore
+  521  git status
+  522  clear
+  523  git add .
+  524  git commit -m "CM3"
+  525  ls
+  526  clear
+  527  ls -a
+  528  ls
+  529  cat .gitignore
+  530  echo "rec1" >> file3.txt
+  531  git status
+  532  echo "test1" >> sample1.doc
+  533  git status
+  534  clear
+  535  clear
+  536  git status
+  537  git commit -m "CM4"
+  538  git add .
+  539  git commit -m "CM4"
+  540  clear
+  541  ls
+  542  echo "rec1" >> sfile1.txt
+  543  git add .
+  544  git status
+  545  clear
+  546  git stash
+  547  git status
+  548  git stash list
+  549  git log
+  550  git stash list
+  551  echo "rec1" >> stest1.txt
+  552  git add .
+  553  git status
+  554  git stash
+  555  git stash list
+  556  echo "rec1" >> stest2.txt
+  557  git add .
+  558  git stash save "all my sep-projv1.0"
+  559  git stash list
+  560  git status
+  561  git stash apply
+  562  git status
+  563  git stash list
+  564  git stash show
+  565  git stash pop
+  566  git stash list
+  567  git stash drop
+  568  clear
+  569  echo "adfasd" >> stext3.txt
+  570  git add .
+  571  git stash branch temp-branch
+  572  git branch
+  573  ls
+  574  git status
+  575  git switch master
+  576  git status
+  577  git branch
