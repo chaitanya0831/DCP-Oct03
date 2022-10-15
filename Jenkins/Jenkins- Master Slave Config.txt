@@ -61,7 +61,7 @@ cd /tmp
 
 sudo wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
 
-sudo tar xf /tmp/apache-maven-3.8.6-bin.tar.gz -C /opt
+sudo tar xf apache-maven-3.8.6-bin.tar.gz -C /opt
 
 #Create a symlink for Apache maven directory to update the maven versions
 sudo ln -s /opt/apache-maven-3.8.6 /opt/maven
