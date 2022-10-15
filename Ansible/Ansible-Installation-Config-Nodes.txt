@@ -1,0 +1,115 @@
+
+Ansible Inatallation & COnfigurations:
+
+Launch 3 EC2 Instances... 1 for Ansible Controller & 2 as Nodes
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Login to Ansible Node1 & Node2. Perform below activities:
+
+#Add User in Ansible Nodes1 : 
+
+useradd -m -d /home/ansibleadmin ansibleadmin
+
+su - ansibleadmin
+
+ssh-keygen
+>
+>
+>
+
+cd /home/ansibleadmin/.ssh
+
+ll
+
+#You should see following two files:
+#id_rsa - private key
+#id_rsa.pub - public
+
+
+#cat id_rsa & copy the private key and paste it into jenkins node config. enter private key directly field. Then,
+
+cat id_rsa.pub > authorized_keys
+
+chown -R ansibleadmin /home/ansibleadmin/.ssh
+chmod 600 /home/ansibleadmin/.ssh/authorized_keys
+chmod 700 /home/ansibleadmin/.ssh
+
+#As a root user edit below file:
+
+$ visudo
+
+add the below mentioned line in the file and save it.
+ansibleadmin ALL=(ALL) NOPASSWD: ALL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#Login to Ansible Controller:
+
+#Install epel Package :
+#Install Ansible 
+
+amazon-linux-extras install epel
+amazon-linux-extras install ansible2
+
+#go to /etc/ansible
+
+#host - inventory file
+#config
+#roles 
+
+# you can edit host file  add the ips of nodes
+
+#[appservers]
+#4.14.136.217
+#3.16.116.209
+
+
+#Add User in Ansible Controller : 
+
+useradd -m -d /home/devopsadmin devopsadmin
+
+chown -R devopsadmin:devopsadmin /etc/ansible
+
+su - devopsadmin
+
+cd /etc/ansible
+
+##Create nodekeys dir under /etc/ansible to maintain the private key files of the nodes 
+
+mkdir ansiblenodekeys
+
+cd ansiblenodekeys
+
+vi ansiblenode1.key ### copy & paste the private key of ansible-node1
+vi ansiblenode2.key ### copy & paste the private key of ansible-node2
+
+chmod 600 ansiblenode1.key
+chmod 600 ansiblenode2.key
+
+#As a root user edit below file:
+$ visudo
+
+#add the below mentioned line in the file and save it.
+devopsadmin ALL=(ALL) NOPASSWD: ALL
+
+
+###test ssh connection from ansible host/controller to remote hosts
+#ssh -p22 -i /etc/ansible/ansiblenodekeys/ansible-node1.key devopsadmin@172.31.47.107
+
+
+
+ssh -p22 -i /etc/ansible/ansiblenodekeys/ansiblenode1.key ansibleadmin@172.31.0.27
+ssh -p22 -i /etc/ansible/ansiblenodekeys/ansiblenode2.key ansibleadmin@172.31.0.160
+
+###update vi etc/ansible/host
+
+[testnodes]
+samplenode1 ansible_ssh_host=172.31.0.27 ansible_ssh_user=ansibleadmin ansible_ssh_private_key_file=/etc/ansible/ansiblenodekeys/ansiblenode1.key
+samplenode2 ansible_ssh_host=172.31.0.160 ansible_ssh_user=ansibleadmin ansible_ssh_private_key_file=/etc/ansible/ansiblenodekeys/ansiblenode2.key
+
+#**************************************
+#hosts file is the default Inventory file for ansible 
+
+**************************************************************************************************************************
+#Access thru Ansible Controller :
+**************************************************************************************************************************
+ansible testnodes -m ping

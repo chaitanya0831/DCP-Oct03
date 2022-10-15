@@ -1,0 +1,46 @@
+pipeline {
+    
+    agent {
+        label 'slave1'
+    }
+
+    tools 
+    {
+        maven 'MAVEN'
+    }
+    
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+
+            }
+			}
+        stage('Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+			}
+			
+        stage('Deploy to QA AppServer') {
+            steps {
+				script {
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'QAServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+				}
+            }
+              post {
+                success {
+                  sh "echo 'Send mail on success'"
+                  //mail bcc: '', body: 'success', cc: '', from: '', replyTo: '', subject: 'success', to: 'xxx@gmail.com'
+                  mail to:"xxx@gmail.com", from: 'xxx@gmail.com', subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "passed."
+                }
+                failure {
+                  sh "echo 'Send mail on failure'"
+                  mail to:"xxx@gmail.com", from: 'xxx@gmail.com', subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "failed."
+                }
+              }
+		}
+    }
+}
