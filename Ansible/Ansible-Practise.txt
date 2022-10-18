@@ -198,3 +198,127 @@ ansible-playbook testfile.yaml --syntax-check
       my_value: "bash version"
    - debug: var=bash_version
    
+   
+Become :
+
+---
+  - hosts: samplenode1
+    gather_facts: false
+    #become: yes
+    tasks:
+      - name: Install httpd
+        yum:
+          name: httpd
+          state: present
+
+
+Handlers :
+
+---
+  - hosts: samplenode1
+    #gather_facts: false
+    become: yes
+    tasks:
+      - name: Install httpd
+        yum:
+          name: httpd
+          state: present
+		register: resultt
+      - debug: var=resultt.changed		
+      - name: start httpd
+        service:
+          name: httpd
+          state: started
+		when: resultt.changed == True
+
+
+---
+  - hosts: samplenode1
+    become: yes
+    tasks:
+      - name: Install httpd
+        yum:
+          name: httpd
+          state: present			# CHANGE=0		
+      - name: start httpd
+        service:
+          name: httpd
+          state: started			# CHANGE=0
+
+---
+  - hosts: samplenode1
+    gather_facts: false
+    become: yes
+    tasks:
+      - name: Install httpd
+        yum:
+          name: httpd
+          state: present			# CHANGE=1
+		notify:
+		  - start httpd		  
+    handlers:
+      - name: start httpd
+        service:
+          name: httpd
+          state: started
+		  
+#Eg.: Labels & Selectors :::  
+
+
+
+
+Loops :
+
+---
+  - hosts: samplenode1
+    become: yes
+    tasks:
+      - yum:
+         name: git
+         state: present
+      - yum:
+         name: httpd
+         state: present
+      - yum:
+         name: vim
+         state: present
+
+---
+  - hosts: samplenode1
+    gather_facts: false
+    become: yes
+    tasks:
+      - yum:
+         name: "{{item}}"
+         state: absent
+        loop:
+          - git
+          - httpd
+          - vim
+          
+          
+#~~~~~~~~~~~~~~~~~~~~~~~~~
+Ansible Roles
+
+Intranet: Repositories for Managing the Playbooks 
+
+Ansible Playbooks --- > Repository
+
+Internet : Access the playbooks 
+
+Ansible-galaxy 
+
+Roles! are the packages of Ansible components / Templates
+
+Team1,2,3,4,5,6
+
+
+Summary:
+
+Ansible
+Install Ansible
+inventory 
+modules,
+playbook
+	handler, loop, var, conditions, 
+	roles 
