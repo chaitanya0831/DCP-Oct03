@@ -1,0 +1,125 @@
+
+
+-mvn-hello-world.war
+
+-deployment ::: 
+
+-Ansible
+
+-create image out of it and deploy  ???
+
+
+How to do deploy using Image ?
+
+Create Dockerfile 
+Create Image out of this Dockerfile
+Run that container.
+
+
+Developers' perspective!
+
+On DevOps perspective, How to achieve this???
+
+
+How many VMs' needed and for wat purpose?
+What are the tools tools needed?
+What is the purpose of these tools and in which stage you use these tools ?
+
+Dev-
+
+jenkins master
+slave - mvn-hello-world.war & img shd be build using docker file
+qa-server
+
+ansible controller --- Nodes :  jmaster,slave, 
+
+image shd be ready in docker-hub
+
+qa-server(docker)  -- create docker image 
+
+
+simple approach is ::
+
+1:
+	install docker in jenkins slave 
+	once be artifact is completed, build the docker image
+	push the docker image to docker hub.
+	
+All the artifacts are maintained in the jfrog-artifactory /
+
+mvn-hello-world.war:SNAPSHOT-v1.0
+mvn-hello-world.war:SNAPSHOT-v1.1
+mvn-hello-world.war:SNAPSHOT-v1.2
+
+
+deploy to PROD-server 
+	
+
+mvn-hello-world.war:SNAPSHOT-v1.1   create docker image out of this and run that container in prod 
+
+
+Ansible Controller :::
+
+Fetch the artifacts from Jenkins Slave into the Ansible Controller
+
+publish this to Artifactory repo.
+Create an Docker image and publish to docker hub.
+
+
+
+QA-Server ???
+
+to run the container ?? docker run image
+
+
+QA-Server ::::
+
+
+java , python, node, .net   service 
+
+one QA-SErver and run all type of applns using docker images 
+
+docker run 
+
+
+
+
+
+
+
+##docker
+
+DevOps Implementation ::
+
+Assessment Phase!
+
+VMs -
+
+
+
+
+QA-Server --- is a QA envrionment 
+
+
+
+
+
+
+Create a cicd pipeline:
+
+to include all that we have discussed now!
+
+Pipeline:
+
+Stages
+	s1
+	s2
+	s3
+	s4
+	s5
+	s6 ....
+
+
+
+
+

@@ -1,0 +1,115 @@
+#Install & configure Tomcat server :
+
+#Check out Official WebPage:
+#https://tomcat.apache.org/
+
+#Launch AWS EC2 Linux Instance:
+
+sudo -i 
+
+yum update -y 
+
+#Install JDK
+#Install epel Package:
+amazon-linux-extras install epel
+
+#Install Java: 
+amazon-linux-extras install java-openjdk11
+
+#Set Java Path / Environment Variables:
+#open .bashrc & add the following lines:
+
+#java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64
+
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64"
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+
+#Save the file
+#open .bash_profile & add the following lines:
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.13.0.8-1.amzn2.0.3.x86_64"
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+
+#Save the file
+
+source ~/.bash_profile
+
+****************************************************************************************************
+
+#Install tomcat in Amazon Linux Instance:
+
+#https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.83/bin/apache-tomcat-8.5.83.tar.gz
+
+cd /opt
+wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.83/bin/apache-tomcat-8.5.83.tar.gz
+tar -xvzf /opt/apache-tomcat-8.5.83.tar.gz
+mv apache-tomcat-8.5.83 tomcat
+
+#Start Tomcat Server:
+#Goto:
+
+cd /opt/tomcat/bin
+./startup.sh
+
+****************************************************************************************************
+
+#Add-USer for Tomcat :
+
+useradd -m -d /home/jenkins jenkin
+
+su - jenkin
+
+ssh-keygen
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_rsa - private key
+#id_rsa.pub - public
+
+#cat id_rsa & copy the private key and paste it into jenkins node config. enter private key directly field.  Then,
+
+cd /home/jenkins/.ssh
+
+cat id_rsa.pub > authorized_keys
+
+chown -R jenkin /home/jenkins/.ssh
+chmod 600 /home/jenkins/.ssh/authorized_keys
+chmod 700 /home/jenkins/.ssh
+
+#make jenkin user as a owner to tomcat dir :
+
+chown -R jenkin /opt/tomcat
+
+****************************************************************************************************
+
+# Configure Jenkins :
+
+#Go to Jenkins Master thru Browser.
+
+#Install Publish over ssh plugin
+
+#Goto Manage Jenkins - Configure System - Configure Publish over ssh Plugin
+
+#Create Jenkins freestyle Job to Test the Deployment as discussed
+
+
+
+
+/opt/tomcat/webapps/target/mvn-hello-world.war
+
+**************************************************************************************
+
+#Github webhook to automatically trigger build pipeline!
+
+#Goto Github Repository setting, 
+Select webhook, 
+
+Click Add Webhook
+
+Enter Jenkins Master URL. eg.:
+http://<public-IP>:8080/github-webhook/
+
+Choose the push event and save the webhook configuration
+
+**********************************************************************************
