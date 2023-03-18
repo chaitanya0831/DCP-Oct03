@@ -1,0 +1,50 @@
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "AKIAUQADF31SASDF37KIMCCA5O7XDU"
+  secret_key = "Hxvkdb5uQFstkjaeacsdULjlxtuqSnYp3d8cVomBiclmDsHO"
+}
+
+# Create AWS Instance
+
+resource "aws_instance" "app_server1" {
+  ami           = "ami-06489866022e12a14"
+  instance_type = "t2.micro"
+  key_name      = "kubeserverkey"
+
+  tags = {
+    Name = "TerraformDemoServer1"
+  }
+}
+
+# Create AWS Instance
+
+resource "aws_instance" "app_server2" {
+  ami           = "ami-06489866022e12a14"
+  instance_type = "t2.micro"
+  key_name      = "kubeserverkey"
+
+  tags = {
+    Name = "TerraformDemoServer1"
+  }
+}
+terraform init
+
+terraform plan
+
+terraform apply
+
+terraform destroy
+
+terraform state list
+
+terraform destroy -target aws_instance.app_server1
+
+terraform state pull
+
+terraform state show aws_instance.app_server2
+
+terraform state rm aws_instance.app_server2
+
+
+
+*****************************************************************************************
